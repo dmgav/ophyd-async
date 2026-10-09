@@ -155,6 +155,10 @@
   - ```{autodoc2-docstring} ophyd_async.core._mock_signal_backend.MockSignalBackend
     :summary:
     ```
+* - {py:obj}`MockPutHandle <ophyd_async.core._mock_signal_utils.MockPutHandle>`
+  - ```{autodoc2-docstring} ophyd_async.core._mock_signal_utils.MockPutHandle
+    :summary:
+    ```
 * - {py:obj}`SignalDict <ophyd_async.core._signal.SignalDict>`
   - ```{autodoc2-docstring} ophyd_async.core._signal.SignalDict
     :summary:
@@ -355,6 +359,10 @@
   - ```{autodoc2-docstring} ophyd_async.core._status.completed_status
     :summary:
     ```
+* - {py:obj}`forward_watcher_updates <ophyd_async.core._status.forward_watcher_updates>`
+  - ```{autodoc2-docstring} ophyd_async.core._status.forward_watcher_updates
+    :summary:
+    ```
 * - {py:obj}`soft_signal_r_and_setter <ophyd_async.core._signal.soft_signal_r_and_setter>`
   - ```{autodoc2-docstring} ophyd_async.core._signal.soft_signal_r_and_setter
     :summary:
@@ -491,6 +499,10 @@
   - ```{autodoc2-docstring} ophyd_async.core._utils.non_zero
     :summary:
     ```
+* - {py:obj}`simulate_move <ophyd_async.core._utils.simulate_move>`
+  - ```{autodoc2-docstring} ophyd_async.core._utils.simulate_move
+    :summary:
+    ```
 * - {py:obj}`derived_signal_r <ophyd_async.core._derived_signal.derived_signal_r>`
   - ```{autodoc2-docstring} ophyd_async.core._derived_signal.derived_signal_r
     :summary:
@@ -505,6 +517,14 @@
     ```
 * - {py:obj}`soft_command <ophyd_async.core._command.soft_command>`
   - ```{autodoc2-docstring} ophyd_async.core._command.soft_command
+    :summary:
+    ```
+* - {py:obj}`generate_directory_uri <ophyd_async.core._path_providers.generate_directory_uri>`
+  - ```{autodoc2-docstring} ophyd_async.core._path_providers.generate_directory_uri
+    :summary:
+    ```
+* - {py:obj}`normalize_path <ophyd_async.core._path_providers.normalize_path>`
+  - ```{autodoc2-docstring} ophyd_async.core._path_providers.normalize_path
     :summary:
     ```
 ````
@@ -1356,6 +1376,14 @@ Bases: {py:obj}`typing.Generic`\[{py:obj}`ophyd_async.core._utils.T`\]
 ```
 ````
 
+````{py:function} forward_watcher_updates(statuses: list[~ophyd_async.core._status.WatchableAsyncStatus], name: str, combine: bool = True) -> ~collections.abc.AsyncIterator[~ophyd_async.core._utils.WatcherUpdate]
+:canonical: ophyd_async.core._status.forward_watcher_updates
+:async:
+
+```{autodoc2-docstring} ophyd_async.core._status.forward_watcher_updates
+```
+````
+
 `````{py:class} Signal(backend: ~ophyd_async.core._signal_backend.SignalBackend[~ophyd_async.core._signal_backend.SignalDatatypeT], timeout: float | None = DEFAULT_TIMEOUT, name: str = '', attempts: int = 1)
 :canonical: ophyd_async.core._signal.Signal
 
@@ -2136,12 +2164,28 @@ Bases: {py:obj}`ophyd_async.core._signal_backend.SignalBackend`\[{py:obj}`ophyd_
 ```
 ````
 
-````{py:function} callback_on_mock_put(signal: ~ophyd_async.core._signal.Signal[~ophyd_async.core._signal_backend.SignalDatatypeT], callback: ~ophyd_async.core._mock_signal_backend.MockPutCallback)
+````{py:function} callback_on_mock_put(signal: ~ophyd_async.core._signal.Signal[~ophyd_async.core._signal_backend.SignalDatatypeT], callback: ~ophyd_async.core._mock_signal_backend.MockPutCallback) -> ~ophyd_async.core._mock_signal_utils.MockPutHandle
 :canonical: ophyd_async.core._mock_signal_utils.callback_on_mock_put
 
 ```{autodoc2-docstring} ophyd_async.core._mock_signal_utils.callback_on_mock_put
 ```
 ````
+
+`````{py:class} MockPutHandle(backend: ~ophyd_async.core._mock_signal_backend.MockSignalBackend, callback: ~ophyd_async.core._mock_signal_backend.MockPutCallback)
+:canonical: ophyd_async.core._mock_signal_utils.MockPutHandle
+
+```{autodoc2-docstring} ophyd_async.core._mock_signal_utils.MockPutHandle
+```
+
+````{py:method} cancel()
+:canonical: ophyd_async.core._mock_signal_utils.MockPutHandle.cancel
+
+```{autodoc2-docstring} ophyd_async.core._mock_signal_utils.MockPutHandle.cancel
+```
+
+````
+
+`````
 
 ````{py:function} callback_on_mock_execute(command: ~ophyd_async.core._command.Command, callback: ~ophyd_async.core._command.MockExecuteCallback)
 :canonical: ophyd_async.core._mock_signal_utils.callback_on_mock_execute
@@ -2961,7 +3005,7 @@ Bases: {py:obj}`typing.Protocol`
 
 ````
 
-````{py:class} StaticPathProvider(filename_provider: ~ophyd_async.core._path_providers.FilenameProvider, directory_path: ~pathlib.PurePath, directory_uri: str | None = None, create_dir_depth: int = 0)
+````{py:class} StaticPathProvider(filename_provider: ~ophyd_async.core._path_providers.FilenameProvider, directory_path: ~pathlib.PurePath | str, directory_uri: str | None = None, create_dir_depth: int = 0)
 :canonical: ophyd_async.core._path_providers.StaticPathProvider
 
 Bases: {py:obj}`ophyd_async.core._path_providers.PathProvider`
@@ -2971,7 +3015,7 @@ Bases: {py:obj}`ophyd_async.core._path_providers.PathProvider`
 
 ````
 
-````{py:class} AutoIncrementingPathProvider(filename_provider: ~ophyd_async.core._path_providers.FilenameProvider, base_directory_path: ~pathlib.PurePath, base_directory_uri: str | None = None, create_dir_depth: int = 0, max_digits: int = 5, starting_value: int = 0, num_calls_per_inc: int = 1, increment: int = 1, inc_delimeter: str = '_', base_name: str | None = None)
+````{py:class} AutoIncrementingPathProvider(filename_provider: ~ophyd_async.core._path_providers.FilenameProvider, base_directory_path: ~pathlib.PurePath | str, base_directory_uri: str | None = None, create_dir_depth: int = 0, max_digits: int = 5, starting_value: int = 0, num_calls_per_inc: int = 1, increment: int = 1, inc_delimeter: str = '_', base_name: str | None = None)
 :canonical: ophyd_async.core._path_providers.AutoIncrementingPathProvider
 
 Bases: {py:obj}`ophyd_async.core._path_providers.PathProvider`
@@ -2981,7 +3025,7 @@ Bases: {py:obj}`ophyd_async.core._path_providers.PathProvider`
 
 ````
 
-````{py:class} YMDPathProvider(filename_provider: ~ophyd_async.core._path_providers.FilenameProvider, base_directory_path: ~pathlib.PurePath, base_directory_uri: str | None = None, create_dir_depth: int = -3, datakey_name_as_base_dir: bool = False)
+````{py:class} YMDPathProvider(filename_provider: ~ophyd_async.core._path_providers.FilenameProvider, base_directory_path: ~pathlib.PurePath | str, base_directory_uri: str | None = None, create_dir_depth: int = -3, datakey_name_as_base_dir: bool = False)
 :canonical: ophyd_async.core._path_providers.YMDPathProvider
 
 Bases: {py:obj}`ophyd_async.core._path_providers.PathProvider`
@@ -3729,6 +3773,14 @@ Bases: {py:obj}`typing.Generic`\[{py:obj}`ophyd_async.core._utils.T`\]
 ```
 ````
 
+````{py:function} simulate_move(old_position: float, new_position: float, velocity: float, acceleration_time: float) -> ~collections.abc.AsyncIterator[float]
+:canonical: ophyd_async.core._utils.simulate_move
+:async:
+
+```{autodoc2-docstring} ophyd_async.core._utils.simulate_move
+```
+````
+
 ````{py:function} derived_signal_r(raw_to_derived: ~collections.abc.Callable[..., ~ophyd_async.core._signal_backend.SignalDatatypeT], derived_units: str | None = None, derived_precision: int | None = None, derived_datatype: type[~ophyd_async.core._signal_backend.SignalDatatypeT] | None = None, **raw_devices_and_constants: ~ophyd_async.core._device.Device | ~ophyd_async.core._signal_backend.Primitive) -> ~ophyd_async.core._signal.SignalR[~ophyd_async.core._signal_backend.SignalDatatypeT]
 :canonical: ophyd_async.core._derived_signal.derived_signal_r
 
@@ -4222,3 +4274,17 @@ Bases: {py:obj}`ophyd_async.core._command.Command`\[\[\]\, {py:obj}`None`\]
 ````
 
 `````
+
+````{py:function} generate_directory_uri(directory_path: ~pathlib.PurePath) -> str
+:canonical: ophyd_async.core._path_providers.generate_directory_uri
+
+```{autodoc2-docstring} ophyd_async.core._path_providers.generate_directory_uri
+```
+````
+
+````{py:function} normalize_path(path: ~pathlib.PurePath | str) -> ~pathlib.PurePath
+:canonical: ophyd_async.core._path_providers.normalize_path
+
+```{autodoc2-docstring} ophyd_async.core._path_providers.normalize_path
+```
+````
